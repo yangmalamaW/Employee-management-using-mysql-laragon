@@ -1,0 +1,48 @@
+-- Create the database
+CREATE DATABASE employee_management; 
+
+-- Use the database
+USE employee_management; 
+
+-- Create the Departments table
+CREATE TABLE Departments (
+department_id INT AUTO_INCREMENT PRIMARY KEY, department_name VARCHAR(50) NOT NULL
+);
+
+-- Create the Employees table
+CREATE TABLE Employees (
+employee_id INT AUTO_INCREMENT PRIMARY KEY, first_name VARCHAR(50), last_name VARCHAR(50), department_id INT, salary DECIMAL(10, 2), FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
+
+-- Insert sample data into Departments
+INSERT INTO Departments (department_name)
+VALUES ('Human Resources'), ('Engineering'), ('Finance'), ('Sales');
+
+-- Insert sample data into Employees
+INSERT INTO Employees (first_name, last  _name, department_id, salary)
+VALUES
+('Alice', 'Smith', 1, 60000.00), ('Bob', 'Johnson', 2, 80000.00), ('Charlie', 'Williams', 2, 90000.00), ('Diana', 'Brown', 3, 75000.00), ('Eve', 'Davis', 4, 50000.00);
+
+SELECT department_id, COUNT(*)
+FROM Departments
+GROUP BY department_id
+HAVING COUNT(*) > 1;
+
+SELECT e.employee_id, e.first_name, e.department_id
+FROM Employees e
+LEFT JOIN Departments d ON e.department_id = d.department_id
+WHERE d.department_id IS NULL;
+
+SELECT employee_id, first_name, salary
+FROM Employees
+WHERE salary NOT BETWEEN 30000 AND 150000;
+
+SELECT first_name, last_name, COUNT(*)
+FROM Employees
+GROUP BY first_name, last_name
+HAVING COUNT(*) > 1;
+
+SELECT d.department_name, SUM(e.salary) AS total_salary
+FROM Employees e
+JOIN Departments d ON e.department_id = d.department_id
+GROUP BY d.department_name;
